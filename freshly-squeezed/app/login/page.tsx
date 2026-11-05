@@ -1,0 +1,5 @@
+'use client'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabase } from '../../lib/supabase'
+export default function Login(){const router=useRouter(),[email,setEmail]=useState(''),[password,setPassword]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false);async function signIn(e:React.FormEvent){e.preventDefault();setBusy(true);setError('');const {error}=await supabase().auth.signInWithPassword({email,password});setBusy(false);if(error)setError(error.message);else router.replace('/admin')};return <main className="auth"><form onSubmit={signIn} className="admin-card"><h1>Freshly Squeezed</h1><p>Private menu management</p><label>Email<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required/></label><label>Password<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required/></label>{error&&<p role="alert" className="error">{error}</p>}<button disabled={busy}>{busy?'Signing in…':'Sign in'}</button><a href="/">← View menu</a></form></main>}
